@@ -10,8 +10,8 @@ var LayerControlAction = {
 // Since each table row in the layer control is a single LayerControlGroup rather than a layer,
 // all the HTML elements are associated with a group rather than an item.
 // options:
-//    display: show, hide, checked, unchecked, map (default)
-//    labels: show, hide, checked, unchecked (default)
+//    display: show, hide
+//    labels: hide, checked, unchecked 
 function LayerControlGroup(layers, name, options)
 {
   options = options || [];
