@@ -1,7 +1,7 @@
 {
   "name": "leaflet-sgsilayercontrol",
-  "version": "0.3.1",
-  "homepage": "https://github.com/ismyrnow/Leaflet.sgsilayercontrol",
+  "version": "1.0.0",
+  "homepage": "https://github.com/phoeniceus/leaflet-sgsilayercontrol",
   "authors": [
     "Matthew Katinsky",
     "Ishmael Smyrnow"
@@ -11,8 +11,11 @@
   "keywords": [
     "leaflet",
     "overlay",
-    "groups",
-    "grouped",
+    "select",
+    "dropdown",
+	"layers",
+	"labels",
+	"toggle",
     "control",
     "plugin"
   ],
