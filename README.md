@@ -59,6 +59,9 @@ The groupedLayers contructor returns the layer control object. This constructor 
 two arguments, an array of LayerControlGroup objects and a set of options:
   
 ```javascript
+  var layerControl = L.control.groupedLayers(groups, { autoZIndex: true, labelCallback: handleLabels });
+  map.addControl(layerControl);
+
 //  autoZIndex: boolean - if true, the layers will be assigned z-index values.
 //  labelCallback: this function called whenever one of the label toggle is clicked
 //    (or if the user changes the selected layer AND the layers toggle is on).
