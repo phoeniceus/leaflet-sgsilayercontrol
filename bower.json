@@ -1,0 +1,27 @@
+{
+  "name": "leaflet-sgsilayercontrol",
+  "version": "0.3.1",
+  "homepage": "https://github.com/ismyrnow/Leaflet.sgsilayercontrol",
+  "authors": [
+    "Matthew Katinsky",
+    "Ishmael Smyrnow"
+  ],
+  "description": "A Leaflet layer control with support for drop-down grouped layers and label toggling.",
+  "main": "dist/leaflet.sgsilayercontrol.min.js",
+  "keywords": [
+    "leaflet",
+    "overlay",
+    "groups",
+    "grouped",
+    "control",
+    "plugin"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <title>Basic Example</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+  <link rel="stylesheet" href="../src/leaflet.sgsilayercontrol.css" />
+  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+  <script src="../src/leaflet.sgsilayercontrol.js"></script>
+</head>
+<body>
+  <div id="map" style="width: 600px; height: 400px"></div>
+<script>
+  /*
+   * Create marker layers to show on map
+   */
+  var cities = new L.LayerGroup();
+  L.marker([39.61, -105.02]).addTo(cities);
+  L.marker([39.74, -104.99]).addTo(cities);
+  L.marker([39.73, -104.8]).addTo(cities);
+  L.marker([39.77, -105.23]).addTo(cities);
+  cities.options = { name: "Cities" };
+
+  var restaurants = new L.LayerGroup();
+  L.marker([39.69, -104.85]).addTo(restaurants);
+  L.marker([39.69, -105.12]).addTo(restaurants);
+  restaurants.options = { name: "Restaurants" };
+
+  var dogs = new L.LayerGroup();
+  L.marker([39.79, -104.95]).addTo(dogs);
+  L.marker([39.79, -105.22]).addTo(dogs);
+  dogs.options = { name: "Dogs" };
+
+  var cats = new L.LayerGroup();
+  L.marker([39.59, -104.75]).bindPopup('A cat').addTo(cats);
+  L.marker([39.59, -105.02]).bindPopup('A cat').addTo(cats);
+  cats.options = { name: "Cats" };
+
+  /*
+   * Create label layers to show on map
+   */
+  var cityLabels = new L.LayerGroup();
+  L.popup().setLatLng([39.61, -105.02]).setContent('Littleton, CO.').addTo(cityLabels);
+  L.popup().setLatLng([39.74, -104.99]).setContent('Denver, CO.').addTo(cityLabels);
+  L.popup().setLatLng([39.73, -104.8]).setContent('Aurora, CO.').addTo(cityLabels);
+  L.popup().setLatLng([39.77, -105.23]).setContent('Golden, CO.').addTo(cityLabels);
+
+  var restaurantLabels = new L.LayerGroup();
+  L.popup().setLatLng([39.69, -104.85]).setContent('Elephant and Castle').addTo(restaurantLabels);
+  L.popup().setLatLng([39.69, -105.12]).setContent('The Restaurant At The End Of The Universe').addTo(restaurantLabels);
+
+  var dogLabels = new L.LayerGroup();
+  L.popup().setLatLng([39.79, -104.95]).setContent('Lassie').addTo(dogLabels);
+  L.popup().setLatLng([39.79, -105.22]).setContent('Snoopy').addTo(dogLabels);
+
+  var catLabels = new L.LayerGroup();
+  L.popup().setLatLng([39.59, -104.75]).setContent('Garfield').addTo(catLabels);
+  L.popup().setLatLng([39.59, -105.02]).setContent('Puss In Boots').addTo(catLabels);
+
+  /*
+   * Create base layers to show on map
+   * These calls to open street map are for sample testing only.
+   * OSM layers should NOT be used directly in a production environment.
+   * See https://switch2osm.org/using-tiles/.
+   */
+  var streets = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    name: "Streets",
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  });
+
+  var landscape = L.tileLayer('http://{s}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png', {
+    name: "Landscape",
+    attribution: '&copy; <a href="http://www.opencyclemap.org">OpenCycleMap</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  });
+
+  var grayscale = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png', {
+    name: "Grayscale",
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+  });
+
+  /*
+   * Create map with initial visible layers
+   */
+  var map = L.map('map', {
+    center: [39.73, -104.99],
+    zoom: 10,
+    layers: [landscape, cities]
+  });
+
+  /*
+   * Create LayerControlGroup objects. Each group represents a single line
+   * in the layer control.
+   *
+   * new LayerControlGroup(layers, name, options);
+   *   layers = Either a single layer object or an array of layers.
+   *            If a single layer, then no select element appears.
+   *            If an array of layers, then select appears. Each layer must have an options.name value.
+   *   name = name that appears on the layer control for this group.
+   *   options = object that can contain the following properties
+   *            display: "hide" or "show". Indicates whether to show the display toggle icon. "hide" = base layer (layer is always visible)
+   *            label: "hide", "unchecked", or "checked" to indicate initial state of labels. 
+   *                   Note: unlike the display toggle which is tied to the map, the label toggle will
+   *                   not update itself if the map state changes. You need to init checked/unchecked manually.
+   */
+  var groups = [
+    new LayerControlGroup([streets, landscape, grayscale], "Base", { display: "hide", label: "hide" }),
+    new LayerControlGroup([cities, restaurants], "Landmarks", { display: "show", label: "unchecked" }),
+    new LayerControlGroup([dogs, cats], "Random", { display: "show", label: "unchecked" })
+  ];
+
+  /*
+   * A callback function to handle clicking/unclicking of labels.
+   * The display toggle automatically shows/hides layers, but the label toggle must be custom coded.
+   * This example uses marker popups as layers, but you can do whatever you please.
+   * Note, the layers argument is always set to an array of layers with label toggles on.
+   */
+  var handleLabels = function (layers) {
+    var allLayers = [cities, restaurants, dogs, cats];
+    var allLabels = [cityLabels, restaurantLabels, dogLabels, catLabels];
+    for (var i in allLayers)
+    {
+      var showLabels = layers.indexOf(allLayers[i]) > -1;
+      var labelsShown = map.hasLayer(allLabels[i]);
+      if (showLabels && !labelsShown) {
+        map.addLayer(allLabels[i]);
+      }
+      else if (!showLabels && labelsShown) {
+        map.removeLayer(allLabels[i]);
+      }
+    }
+  };
+
+  // Use the custom grouped layer control, not "L.control.layers"
+  var layerControl = L.control.groupedLayers(groups, { autoZIndex: true, labelCallback: handleLabels });
+  map.addControl(layerControl);
+
+  // Remove and add a layer
+  //layerControl.removeLayer(cities);
+  //layerControl.addOverlay(cities, "Cities", "New Category");
+</script>
+</body>
+</html>

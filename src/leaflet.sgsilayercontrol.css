@@ -1,0 +1,46 @@
+.leaflet-control-layers-group-name {
+  font-weight: bold;
+  margin-bottom: .2em;
+  display: block;
+}
+
+.leaflet-control-layers-group {
+  margin-bottom: .5em;
+}
+
+.leaflet-control-layers-group label {
+  padding-left: .5em;
+}
+
+select.leaflet-control-layers-selector {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.leaflet-control-layers-overlays th {
+  border-bottom: solid black 1px;
+}
+
+.leaflet-control-display-checked {
+  background-image: url('../img/display.png');
+  width: 19px;
+  height: 19px;
+}
+
+.leaflet-control-display-unchecked {
+  background-image: url('../img/display_gray.png');
+  width: 19px;
+  height: 19px;
+}
+
+.leaflet-control-label-checked {
+  background-image: url('../img/label.png');
+  width: 19px;
+  height: 19px;
+}
+
+.leaflet-control-label-unchecked {
+  background-image: url('../img/label_gray.png');
+  width: 19px;
+  height: 19px;
+}
