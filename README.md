@@ -46,7 +46,7 @@ The LayerControlGroup constructor takes three arguments:
   var groups = [
     new LayerControlGroup([streets, landscape, grayscale], "Base", { display: "hide", label: "hide" }),
     new LayerControlGroup([cities, restaurants], "Landmarks", { display: "show", label: "unchecked" }),
-    new LayerControlGroup([dogs, cats], "Random", { display: "show", label: "unchecked" })
+    new LayerControlGroup([dogs, cats], "Random", { display: "show", label: "checked", selectedItemName: "Cats" })
   ];
 
 ```
