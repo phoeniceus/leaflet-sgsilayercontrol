@@ -35,7 +35,7 @@
   var cats = new L.LayerGroup();
   L.marker([39.59, -104.75]).bindPopup('A cat').addTo(cats);
   L.marker([39.59, -105.02]).bindPopup('A cat').addTo(cats);
-  cats.options = { name: "Cats" };
+  cats.options = { name: "Cats", labelSource: "Cats" };
 
   /*
    * Create label layers to show on map
@@ -106,7 +106,7 @@
   var groups = [
     new LayerControlGroup([streets, landscape, grayscale], "Base", { display: "hide", label: "hide" }),
     new LayerControlGroup([cities, restaurants], "Landmarks", { display: "show", label: "unchecked" }),
-    new LayerControlGroup([dogs, cats], "Random", { display: "show", label: "unchecked" })
+    new LayerControlGroup([dogs, cats], "Random", { display: "show", label: "checked", selectedItemName: "Cats" })
   ];
 
   /*

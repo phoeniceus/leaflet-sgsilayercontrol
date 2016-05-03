@@ -14,9 +14,11 @@ var LayerControlAction = {
 //    labels: hide, checked, unchecked 
 function LayerControlGroup(layers, name, options)
 {
+  var self = this;
   options = options || [];
   options.display = options.display || "show";
   options.label = options.label || "unchecked";
+  options.selectedItemName = options.selectedItemName || "";
 
   // Convert single layer to array if necessary
   if (!(layers && layers.constructor === Array)) { layers = [layers]; }
@@ -135,7 +137,10 @@ function LayerControlGroup(layers, name, options)
     var selectHtml = '<select class="leaflet-control-layers-selector" onmouseout="if (arguments[0]) {arguments[0].stopPropagation();} else {window.event.cancelBubble();}">';
     for (var i = 0; i < this.layers.length; i++)
     {
-      selectHtml += '<option value="' + this.layers[i].options.name + '">' + this.layers[i].options.name + "</option>";
+      var currentLayer = this.layers[i];
+      var name = currentLayer.options.name;
+      var isSelected = ((options.selectedItemName === currentLayer.options.labelSource)) ? "selected" : "";
+      selectHtml += '<option ' + isSelected + ' value="' + name + '">' + name + "</option>";
     }
     selectHtml += '</select>';
 
@@ -160,7 +165,8 @@ function LayerControlGroup(layers, name, options)
   };
 
   // Toggle the display icon based on map state.
-  this.init = function (map) {
+  this.init = function (map)
+  {
     var visibleLayers = this.layers.filter(function (layer) { return map.hasLayer(layer); });
     this.setDisplay(visibleLayers.length > 0);
     if (visibleLayers.length > 0) this.setSelectedLayer(visibleLayers[0]);
