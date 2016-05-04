@@ -18,6 +18,18 @@ select.leaflet-control-layers-selector {
   float: right;
 }
 
+select.leaflet-control-layers-selector-blue {
+  display: inline-block;
+  float: left;
+  color: blue;
+}
+
+select.leaflet-control-layers-selector-red {
+  display: inline-block;
+  float: left;
+  color: red;
+}
+
 .leaflet-control-layers-overlays th {
   border-bottom: solid black 1px;
 }
