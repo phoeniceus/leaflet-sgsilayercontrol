@@ -11,20 +11,22 @@ var LayerControlAction = {
 // all the HTML elements are associated with a group rather than an item.
 // options:
 //    display: show, hide
-//    labels: hide, checked, unchecked 
+//    labels: hide, checked, unchecked
 function LayerControlGroup(layers, name, options)
 {
+  var self = this;
   options = options || [];
   options.display = options.display || "show";
   options.label = options.label || "unchecked";
-
+  options.selectedItemName = options.selectedItemName || "";
+  options.shouldDisplayName = options.shouldDisplayName === false ? false : true;
   // Convert single layer to array if necessary
   if (!(layers && layers.constructor === Array)) { layers = [layers]; }
 
   this.layers = layers;
   this.name = name;
 
-  // Assign group name to every layer. 
+  // Assign group name to every layer.
   // Note: This means a layer can only appear in a single group.
   for (var i in layers)
   {
@@ -122,20 +124,23 @@ function LayerControlGroup(layers, name, options)
 
   // Create the name element
   this.nameElement = document.createElement('span');
-  this.nameElement.innerHTML = ' ' + this.name;
+  this.nameElement.innerHTML = ' ' + (options.shouldDisplayName === true ? this.name : '');
   this.nameElement.groupName = this.name;
 
   // Create the select element
   if (layers && layers.constructor === Array && layers.length > 1)
   {
     // IE7 bugs out if you create a radio dynamically, so you have to do it this hacky way (see http://bit.ly/PqYLBe)
-    // NOTE: Opening the select element and displaying the options list fires the select.onmouseout event which 
+    // NOTE: Opening the select element and displaying the options list fires the select.onmouseout event which
     // propagates to the div container and collapses the layer control. The onmouseout handler below will
     // stop this event from propagating. It has an if-else clause because IE handles this differently than other browsers.
-    var selectHtml = '<select class="leaflet-control-layers-selector" onmouseout="if (arguments[0]) {arguments[0].stopPropagation();} else {window.event.cancelBubble();}">';
+    var selectHtml = '<select class="leaflet-control-layers-selector-' + name + '" onmouseout="if (arguments[0]) {arguments[0].stopPropagation();} else {window.event.cancelBubble();}">';
     for (var i = 0; i < this.layers.length; i++)
     {
-      selectHtml += '<option value="' + this.layers[i].options.name + '">' + this.layers[i].options.name + "</option>";
+      var currentLayer = this.layers[i];
+      var name = currentLayer.options.name;
+      var isSelected = ((options.selectedItemName === currentLayer.options.labelSource)) ? "selected" : "";
+      selectHtml += '<option ' + isSelected + ' value="' + name + '">' + name + "</option>";
     }
     selectHtml += '</select>';
 
@@ -160,7 +165,8 @@ function LayerControlGroup(layers, name, options)
   };
 
   // Toggle the display icon based on map state.
-  this.init = function (map) {
+  this.init = function (map)
+  {
     var visibleLayers = this.layers.filter(function (layer) { return map.hasLayer(layer); });
     this.setDisplay(visibleLayers.length > 0);
     if (visibleLayers.length > 0) this.setSelectedLayer(visibleLayers[0]);
@@ -360,10 +366,9 @@ L.Control.GroupedLayers = L.Control.extend({
       td.innerHTML = "&nbsp;";
     }
     tr.appendChild(td);
-
-    td = document.createElement('td');
-    td.appendChild(group.nameElement);
-    if (group.selectElement)
+	td = document.createElement('td');
+	td.appendChild(group.nameElement);
+	if (group.selectElement)
     {
       L.DomEvent.on(group.selectElement, 'change', this._onLayerControlAction, this);
       td.appendChild(group.selectElement);
